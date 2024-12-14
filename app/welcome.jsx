@@ -4,6 +4,7 @@ import ScreenWrapper from '../components/ScreenWrapper'
 import { StatusBar } from "expo-status-bar";
 import { wp, hp } from "../helpers/common";
 import { theme } from "../constants/theme";
+import Button from "../components/Button";
 
 const Welcome = () => {
   return (
@@ -20,6 +21,15 @@ const Welcome = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, officia.
           </Text>
         </View>
+
+        {/* footer */}
+        <View style={styles.footer}>
+          <Button
+            title="Getting Started"
+            buttonStyle={{marginHorizontal: wp(3)}}
+            onPress={()=>{}}
+          />
+        </View>
       </View>
     </ScreenWrapper>
   )
@@ -31,9 +41,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     backgroundColor: 'white',
-    paddingHorizontal: wp(4)
+    paddingHorizontal: wp(4),
   },
 
   welcomeImage: {
@@ -52,5 +62,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(10),
     fontSize: hp(1.7),
     color: theme.colors.text
+  },
+  footer: {
+    gap: 30,
+    width: '100%'
   }
 });
