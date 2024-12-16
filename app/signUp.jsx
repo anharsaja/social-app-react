@@ -3,13 +3,13 @@ import React, { useRef, useState } from 'react'
 import ScreenWrapper from '../components/ScreenWrapper'
 import { theme } from '../constants/theme'
 import { StatusBar } from 'expo-status-bar'
-import BackButton from '../components/BackButton'
 import { useRouter } from 'expo-router'
 import { hp, wp } from '../helpers/common'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import Icon from '../assets/icons'
 import { supabase } from '../lib/subapase'
+import WelcomeButton from '../components/WelcomeButton'
 
 const SignUp = () => {
     const router = useRouter();
@@ -53,7 +53,7 @@ const SignUp = () => {
         <ScreenWrapper bg="white">
             <StatusBar style="dark" />
             <View style={styles.container}>
-                <BackButton router={router} />
+                <WelcomeButton router={router} />
 
                 {/* welcome */}
                 <View>
