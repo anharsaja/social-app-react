@@ -9,6 +9,7 @@ import { hp, wp } from '../helpers/common'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import Icon from '../assets/icons'
+import { supabase } from '../lib/subapase'
 
 const SignUp = () => {
     const router = useRouter();
@@ -17,10 +18,34 @@ const SignUp = () => {
     const passwordRef = useRef("");
     const [loading, setLoading] = useState(false);
 
-    const onSubmit = () => {
-        if (!emailRef.current || nameRef.current || passwordRef.current) {
+    const onSubmit = async () => {
+        if (!emailRef.current || !passwordRef.current) {
             Alert.alert('Sign Up', "please fill all the fields!");
             return;
+        }
+
+        let name = nameRef.current.trim();
+        let email = emailRef.current.trim();
+        let password = passwordRef.current.trim();
+
+        setLoading(true);
+
+
+        const { data: { session }, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    name
+                }
+            }
+        });
+        setLoading(false);
+
+        console.log('session: ', session)
+        console.log('error: ', error)
+        if(error) {
+            Alert.alert('Sign up', error.message);
         }
     }
 
@@ -42,17 +67,17 @@ const SignUp = () => {
                         Please fill the details to create an account!
                     </Text>
                     <Input
-                        icon={<Icon name="user" size={26} strokeWidth={1.6} color={theme.colors.text}/>}
+                        icon={<Icon name="user" size={26} strokeWidth={1.6} color={theme.colors.text} />}
                         placeholder="Enter your name"
                         onChangeText={value => nameRef.current = value}
                     />
                     <Input
-                        icon={<Icon name="mail" size={26} strokeWidth={1.6} color={theme.colors.text}/>}
+                        icon={<Icon name="mail" size={26} strokeWidth={1.6} color={theme.colors.text} />}
                         placeholder="Enter your email"
                         onChangeText={value => emailRef.current = value}
                     />
                     <Input
-                        icon={<Icon name="lock" size={26} strokeWidth={1.6} color={theme.colors.text}/>}
+                        icon={<Icon name="lock" size={26} strokeWidth={1.6} color={theme.colors.text} />}
                         placeholder="Enter your password"
                         secureTextEntry
                         onChangeText={value => passwordRef.current = value}
@@ -66,8 +91,8 @@ const SignUp = () => {
                     <Text style={styles.footerText}>
                         Already have account?
                     </Text>
-                    <Pressable onPress={()=> router.push("login")}>
-                        <Text style={[styles.footerText, {color:theme.colors.primaryDark, fontWeight: theme.fonts.semibold}]}>Login</Text>
+                    <Pressable onPress={() => router.push("login")}>
+                        <Text style={[styles.footerText, { color: theme.colors.primaryDark, fontWeight: theme.fonts.semibold }]}>Login</Text>
                     </Pressable>
                 </View>
             </View>
