@@ -1,5 +1,5 @@
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ScreenWrapper from '../components/ScreenWrapper'
 import { theme } from '../constants/theme'
 import { StatusBar } from 'expo-status-bar'
@@ -9,17 +9,41 @@ import { hp, wp } from '../helpers/common'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import Icon from '../assets/icons'
+import { supabase } from '../lib/subapase'
 
 const Login = () => {
     const router = useRouter();
     const emailRef = useRef("");
     const passwordRef = useRef("");
+    const [email, setEmail] = useState('anharmuk12@gmail.com'); // Atur nilai default di sini
+    const [password, setPassword] = useState('asdjkl'); // Atur nilai default di sini
     const [loading, setLoading] = useState(false);
 
-    const onSubmit = () => {
-        if (!emailRef.current || passwordRef.current) {
+    useEffect(() => {
+        emailRef.current = email; // Sinkronisasi nilai awal
+        passwordRef.current = password; // Sinkronisasi nilai awal
+    }, [email, password]);
+
+    const onSubmit = async () => {
+        if (!emailRef.current || !passwordRef.current) {
             Alert.alert('Login', "please fill all the fields!");
             return;
+        }
+        let email = emailRef.current.trim();
+        let password = passwordRef.current.trim();
+
+        setLoading(true);
+        const { data: { session }, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        setLoading(false);
+
+        // console.log('session', session);
+        console.log('error', error);
+        if (error) {
+            Alert.alert('Login', error.message);
         }
     }
 
@@ -41,15 +65,23 @@ const Login = () => {
                         Please login to continue
                     </Text>
                     <Input
-                        icon={<Icon name="mail" size={26} strokeWidth={1.6} color={theme.colors.text}/>}
+                        icon={<Icon name="mail" size={26} strokeWidth={1.6} color={theme.colors.text} />}
                         placeholder="Enter your email"
-                        onChangeText={value => emailRef.current = value}
+                        onChangeText={value => {
+                            emailRef.current = value;
+                            setEmail(value);
+                        }}
+                        value={email} // Gunakan state sebagai sumber nilai
                     />
                     <Input
-                        icon={<Icon name="lock" size={26} strokeWidth={1.6} color={theme.colors.text}/>}
+                        icon={<Icon name="lock" size={26} strokeWidth={1.6} color={theme.colors.text} />}
                         placeholder="Enter your password"
                         secureTextEntry
-                        onChangeText={value => passwordRef.current = value}
+                        onChangeText={value => {
+                            passwordRef.current = value;
+                            setPassword(value);
+                        }}
+                        value={password}
                     />
                     <Text style={styles.forgotPassword}>
                         Forgot Password?
@@ -64,8 +96,8 @@ const Login = () => {
                     <Text style={styles.footerText}>
                         Dont' have an account?
                     </Text>
-                    <Pressable onPress={()=> router.push("signUp")}>
-                        <Text style={[styles.footerText, {color:theme.colors.primaryDark, fontWeight: theme.fonts.semibold}]}>Sign Up</Text>
+                    <Pressable onPress={() => router.push("signUp")}>
+                        <Text style={[styles.footerText, { color: theme.colors.primaryDark, fontWeight: theme.fonts.semibold }]}>Sign Up</Text>
                     </Pressable>
                 </View>
             </View>
