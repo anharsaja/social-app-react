@@ -33,7 +33,7 @@
     },
     
     "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font, JetBrains Mono Nerd Font, Consolas, 'Courier New', monospace",
-    "workbench.colorTheme": "Snazzy Operator",
+    "workbench.colorTheme": "Snazzy Plus",
     "editor.fontLigatures": true,
     "explorer.confirmDelete": false,
     "window.menuBarVisibility": "toggle",

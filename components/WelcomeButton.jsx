@@ -3,15 +3,15 @@ import React from 'react'
 import Icon from '../assets/icons'
 import { theme } from '../constants/theme'
 
-const BackButton = ({size=26, router}) => {
+const WelcomeButton = ({size=26, router}) => {
     return (
-        <Pressable onPress={()=> router.back()} style={styles.button}>
+        <Pressable onPress={()=> router.push('welcome')} style={styles.button}>
             <Icon name="arrowLeft" strokeWidth={2.5} size={size} color={theme.colors.text}/>
         </Pressable>
     )
 }
 
-export default BackButton
+export default WelcomeButton
 
 const styles = StyleSheet.create({
     button: {
