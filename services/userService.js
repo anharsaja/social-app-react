@@ -4,7 +4,14 @@ import { supabase } from "../lib/subapase"
 export const getUserData = async (userId) => {
     try {
         const {data, error} = await supabase
-        .from('users');
+        .from('users')
+        .select()
+        .eq('id', userId)
+        .single()
+        if (error){
+            return {success: false, msg: error?.message};
+        }
+        return {success: true, data};
     } catch(error) {
         console.log('get error', error);
         return {success: false, msg: error.message};

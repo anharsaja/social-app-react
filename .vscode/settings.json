@@ -1,0 +1,56 @@
+{
+    "database-client.autoSync": true,
+    "GitLive.Special branches": "main|master|trunk|dev|develop|qa|test|release[-/].*",
+    "editor.fontFamily": "JetBrainsMono Nerd Font, JetBrains Mono Nerd Font, Consolas, 'Courier New', monospace",
+
+
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "terminal.integrated.profiles.linux": {
+      "bash": {
+        "path": "bash",
+        "icon": "terminal-bash"
+      },
+      "zsh": {
+        "path": "zsh"
+      },
+      "fish": {
+        "path": "/sbin/fish"
+      },
+      "tmux": {
+        "path": "tmux",
+        "icon": "terminal-tmux"
+      },
+      "pwsh": {
+        "path": "pwsh",
+        "icon": "terminal-powershell"
+      },
+      "kitty": {
+        "path": "/sbin/kitty"
+      },
+      "fish (2)": {
+        "path": "/bin/fish"
+      }
+    },
+    
+    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font, JetBrains Mono Nerd Font, Consolas, 'Courier New', monospace",
+    "workbench.colorTheme": "Snazzy Operator",
+    "editor.fontLigatures": true,
+    "explorer.confirmDelete": false,
+    "window.menuBarVisibility": "toggle",
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[php]": {
+      "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
+    "workbench.iconTheme": "material-icon-theme",
+    "window.customTitleBarVisibility": "auto",
+    "[javascript]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "editor.fontSize": 12,
+}
