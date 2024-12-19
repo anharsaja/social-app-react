@@ -1,5 +1,5 @@
 import { Alert, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ScreenWrapper from '../../components/ScreenWrapper'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../../contexts/AuthContext'
@@ -13,18 +13,21 @@ import Button from '../../components/Button'
 const Home = () => {
 
     const { user, setAuth } = useAuth();
-
+    
     const router = useRouter();
+    
+    useEffect(() => {
+        console.log('User logged in:', user);
+    }, [user]);
+    
 
-    // console.log('user', user);
-
-    const onLogout = async () => {
-        // setAuth(null);
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-            Alert.alert('Sign out', "Error sign out");
-        }
-    }
+    // const onLogout = async () => {
+    //     // setAuth(null);
+    //     const { error } = await supabase.auth.signOut();
+    //     if (error) {
+    //         Alert.alert('Sign out', "Error sign out");
+    //     }
+    // }
 
     return (
         <ScreenWrapper bg="white">
@@ -40,19 +43,24 @@ const Home = () => {
                             <Icon name="plus" size={hp(3.2)} strokeWidth={2} color={theme.colors.text} />
                         </Pressable>
                         <Pressable onPress={() => router.push('profile')}>
-                            <Avatar />
+                            <Avatar 
+                                uri={user?.image}
+                                size={hp(4.3)}
+                                rounded={theme.radius.sm}
+                                style={{borderWidth: 2}}
+                            />
                         </Pressable>
                     </View>
                 </View>
             </View>
             {/* <Button title='logout' onPress={onLogout}/> */}
-            <View style={[styles.footer, {paddingBottom: 15}]}>
+            {/* <View style={[styles.footer, {paddingBottom: 15}]}>
                 <Button
                     title="Log Out"
                     buttonStyle={{ marginHorizontal: wp(35), backgroundColor: "red" }}
                     onPress={onLogout}
                 />
-            </View>
+            </View> */}
 
         </ScreenWrapper>
     )
