@@ -110,7 +110,6 @@ const UserHeader = ({ user, router, handleLogout }) => {
                         {
                             user && user.bio && (
                                 <View style={styles.info}>
-                                    <Icon name='user' size={20} color={theme.colors.textLight} />
                                     <Text style={styles.infoText}>
                                         {user && user.bio}
                                     </Text>
@@ -164,13 +163,14 @@ const styles = StyleSheet.create({
     info: {
         flexDirection: 'row',
         alignItems: 'center',
-        color: theme.colors.textDark
+        color: theme.colors.textDark,
+        gap: 10
     },
     infoText: {
         fontSize: hp(1.6),
         fontWeight: '500',
         color: theme.colors.textLight,
-        paddingHorizontal: 10
+        // paddingHorizontal: 10
     },
     logoutButton: {
         position: 'absolute',
