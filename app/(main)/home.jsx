@@ -1,5 +1,5 @@
 import { Alert, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ScreenWrapper from '../../components/ScreenWrapper'
 import { useRouter } from 'expo-router'
 import { useAuth } from '../../contexts/AuthContext'
@@ -13,12 +13,22 @@ import Button from '../../components/Button'
 const Home = () => {
 
     const { user, setAuth } = useAuth();
-    
     const router = useRouter();
-    
+
+    const [posts, setPosts] = useState([]);
+
+
     useEffect(() => {
-        console.log('User logged in:', user);
-    }, [user]);
+        getPosts();
+    }, [])
+
+    const getPosts = async () => {
+        // call the API here
+    }
+    
+    // useEffect(() => {
+    //     console.log('User logged in:', user);
+    // }, [user]);
     
 
     // const onLogout = async () => {
