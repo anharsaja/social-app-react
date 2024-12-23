@@ -1,15 +1,49 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import ScreenWrapper from '../../components/ScreenWrapper'
 import Header from '../../components/Header'
 import { theme } from '../../constants/theme'
 import { hp, wp } from '../../helpers/common'
+import { useAuth } from '../../contexts/AuthContext'
+import Avatar from '../../components/Avatar'
+import RichTextEditor from '../../components/RichTextEditor'
+import { useRouter } from 'expo-router'
 
 const NewPost = () => {
+    const { user } = useAuth();
+    const bodyRef = useRef("");
+    const editorRef = useRef(null);
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [file, setFile] = useState(file);
+
     return (
         <ScreenWrapper bg={'white'}>
             <View style={styles.container}>
                 <Header title="Create Post" />
+                <ScrollView contentContainerStyle={{ gap: 20 }}>
+                    {/* avatar */}
+                    <View style={styles.header}>
+                        <Avatar
+                            uri={user?.image}
+                            size={hp(6.5)}
+                            rounded={theme.radius.xl}
+                        />
+                        <View style={{ gap: 2 }}>
+                            <Text style={styles.username}>
+                                {
+                                    user && user.name
+                                }
+                            </Text>
+                            <Text style={styles.publicText}>
+                                Public
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={styles.textEditor}>
+                        <RichTextEditor editorRef={editorRef} onChange={body => bodyRef.current = body}/>
+                    </View>
+                </ScrollView>
             </View>
         </ScreenWrapper>
     )
