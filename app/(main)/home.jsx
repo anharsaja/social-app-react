@@ -1,4 +1,4 @@
-import { Alert, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Alert, FlatList, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ScreenWrapper from '../../components/ScreenWrapper'
 import { useRouter } from 'expo-router'
@@ -9,7 +9,10 @@ import { theme } from '../../constants/theme'
 import Icon from '../../assets/icons'
 import Avatar from '../../components/Avatar'
 import Button from '../../components/Button'
+import { fetchPosts } from '../../services/postService'
+import PostCard from '../../components/PostCard'
 
+var limit = 0;
 const Home = () => {
 
     const { user, setAuth } = useAuth();
@@ -24,6 +27,15 @@ const Home = () => {
 
     const getPosts = async () => {
         // call the API here
+        limit = limit + 10;
+
+        console.log('fetching posts', limit);
+        let res = await fetchPosts(limit);
+        if(res.success){
+            setPosts(res.data);
+        }
+        // console.log('got posts result: ', res);
+        // console.log('user: ', res.data[0].user)
     }
     
     // useEffect(() => {
@@ -62,6 +74,21 @@ const Home = () => {
                         </Pressable>
                     </View>
                 </View>
+
+                {/* Posts */}
+                <FlatList
+                    data={posts}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.listStyle}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({item}) => <PostCard
+                        item={item}
+                        currentUser={user}
+                        router={router}
+                    />
+                    }
+                />
+
             </View>
             {/* <Button title='logout' onPress={onLogout}/> */}
             {/* <View style={[styles.footer, {paddingBottom: 15}]}>
