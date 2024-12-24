@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 18,
         borderRadius: theme.radius.xl,
         borderCurve: 'continuous',
-        borderColor: theme.colors.gray
+        borderColor: theme.colors.gray,
     },
     mediaIcons: {
         flexDirection: 'row',
