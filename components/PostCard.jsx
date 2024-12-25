@@ -1,15 +1,17 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Share, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { hp, wp } from "../helpers/common";
+import { hp, stripHtmlTags, wp } from "../helpers/common";
 import { theme } from "../constants/theme";
 import Avatar from "./Avatar";
 import moment from "moment";
 import Icon from "../assets/icons";
 import RenderHTML from "react-native-render-html";
 import { Image } from "expo-image";
-import { getSupabaseFileUrl } from "../services/imageService";
+import { downloadFile, getSupabaseFileUrl } from "../services/imageService";
 import { Video } from "expo-av";
 import { createPostLike, removePostLike } from "../services/postService";
+import Loading from './Loading'
+
 
 const textStyle = {
   color: theme.colors.textDark,
@@ -42,6 +44,7 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
   };
 
   const [likes, setLikes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLikes(item?.postLikes);
@@ -81,7 +84,21 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     }
   }
 
+  const onShare = async () => {
+    let content = { message: stripHtmlTags(item?.body) }
+    if (item?.file) {
+      // download the file then share the local uri
+      setLoading(true);
+      let url = await downloadFile(getSupabaseFileUrl(item?.file).uri);
+      content.url = url;
+      setLoading(false);
+    }
+    Share.share(content);
+    // console.log(content);
+  }
+
   const createdAt = moment(item?.created_at).format("MMM D");
+  // const liked = (likes || false).filter(like => like.userId === currentUser?.id)[0] ? true : false;
   const liked = likes.filter(like => like.userId == currentUser?.id)[0] ? true : false;
   // console.log('item: ', item)
 
@@ -172,9 +189,15 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
 
 
         <View style={styles.footerButton}>
-          <TouchableOpacity>
-            <Icon name="share" size={24} color={theme.colors.textLight} />
-          </TouchableOpacity>
+          {
+            loading ? (
+              <Loading size="small"/>
+            ):(
+              <TouchableOpacity onPress={onShare}>
+                <Icon name="share" size={24} color={theme.colors.textLight} />
+              </TouchableOpacity>
+            )
+          }
         </View>
 
 
