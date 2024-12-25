@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { hp, wp } from "../helpers/common";
 import { theme } from "../constants/theme";
 import Avatar from "./Avatar";
@@ -9,6 +9,7 @@ import RenderHTML from "react-native-render-html";
 import { Image } from "expo-image";
 import { getSupabaseFileUrl } from "../services/imageService";
 import { Video } from "expo-av";
+import { createPostLike, removePostLike } from "../services/postService";
 
 const textStyle = {
   color: theme.colors.textDark,
@@ -40,13 +41,49 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
     elevation: 1,
   };
 
+  const [likes, setLikes] = useState([]);
+
+  useEffect(() => {
+    setLikes(item?.postLikes);
+  }, [])
+
   const openPostDetails = () => {
     // later
   };
 
+  const onLike = async () => {
+    if (liked) {
+      // remove like
+      let updatedLikes = likes.filter(like => like.userId != currentUser?.id)
+
+      setLikes([...updatedLikes]);
+
+      let res = await removePostLike(item?.id, currentUser?.id);
+      console.log('remove likes ', res)
+      if (res.success) {
+        Alert.alert('Post', 'Something went wrong!')
+      }
+
+    } else {
+      // create like
+      let data = {
+        userId: currentUser?.id,
+        postId: item?.id
+      }
+
+      setLikes([...likes, data]);
+
+      let res = await createPostLike(data);
+      console.log('create likes: ', res)
+      if (res.success) {
+        Alert.alert('Post', 'Something went wrong!')
+      }
+    }
+  }
+
   const createdAt = moment(item?.created_at).format("MMM D");
-  const likes = [];
-  const liked = false;
+  const liked = likes.filter(like => like.userId == currentUser?.id)[0] ? true : false;
+  // console.log('item: ', item)
 
   return (
     <View style={[styles.container, hasShadow && shadowStyles]}>
@@ -111,8 +148,8 @@ const PostCard = ({ item, currentUser, router, hasShadow = true }) => {
       {/* like, comment, & share */}
       <View style={styles.footer}>
         <View style={styles.footerButton}>
-          <TouchableOpacity>
-            <Icon name="heart" size={24} fill={liked? theme.colors.rose: 'transparent'} color={liked ? theme.colors.rose : theme.colors.textLight} />
+          <TouchableOpacity onPress={onLike}>
+            <Icon name="heart" size={24} fill={liked ? theme.colors.rose : 'transparent'} color={liked ? theme.colors.rose : theme.colors.textLight} />
           </TouchableOpacity>
           <Text style={styles.count}>
             {
